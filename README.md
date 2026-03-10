@@ -32,8 +32,16 @@ src/main/java/com/taller/patrones/
 
 **Preguntas:**
 - ¿Qué problema te encuentras al añadir "Meteoro"?
+
+Tengo que modificar la clase CombatEngine violando el principio SOLID Open/Closed Principle (OCP).
+
 - ¿Qué pasa si mañana piden 10 ataques más?
+
+El switch crecería demasiado siendo difícil de mantener.
+
 - ¿Qué patrón permitiría añadir ataques **sin modificar** `CombatEngine`?
+
+Factory Method
 
 **Pista:** Busca en `infrastructure/combat/CombatEngine.java`
 
