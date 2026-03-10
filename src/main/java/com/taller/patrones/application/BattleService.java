@@ -5,6 +5,7 @@ import com.taller.patrones.domain.Battle;
 import com.taller.patrones.domain.Character;
 import com.taller.patrones.infrastructure.combat.CombatEngine;
 import com.taller.patrones.infrastructure.persistence.BattleRepository;
+import com.taller.patrones.interfaces.rest.adapter.FighterData;
 
 import java.util.List;
 import java.util.UUID;
@@ -23,19 +24,19 @@ public class BattleService {
     public static final List<String> PLAYER_ATTACKS = List.of("TACKLE", "SLASH", "FIREBALL", "ICE_BEAM", "POISON_STING", "THUNDER","METEORO");
     public static final List<String> ENEMY_ATTACKS = List.of("TACKLE", "SLASH", "FIREBALL");
 
-    public BattleStartResult startBattle(String playerName, String enemyName) {
+    public BattleStartResult startBattle(FighterData playerData, FighterData enemyData) {
         Character player = Character.builder()
-                .name(playerName != null ? playerName : "Héroe")
-                .maxHp(150)
-                .attack(25)
+                .name(playerData.getName())
+                .maxHp(playerData.getHp())
+                .attack(playerData.getAtk())
                 .defense(15)
                 .speed(20)
                 .build();
 
         Character enemy = Character.builder()
-                .name(enemyName != null ? enemyName : "Dragón")
-                .maxHp(120)
-                .attack(30)
+                .name(enemyData.getName())
+                .maxHp(enemyData.getHp())
+                .attack(enemyData.getAtk())
                 .defense(10)
                 .speed(15)
                 .build();

@@ -3,6 +3,8 @@ package com.taller.patrones.interfaces.rest;
 import com.taller.patrones.application.BattleService;
 import com.taller.patrones.domain.Battle;
 import com.taller.patrones.domain.Character;
+import com.taller.patrones.interfaces.rest.adapter.FighterData;
+import com.taller.patrones.interfaces.rest.adapter.LegacyProviderAdapter;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,11 +19,10 @@ public class BattleController {
     private final BattleService battleService = new BattleService();
 
     @PostMapping("/start")
-    public ResponseEntity<Map<String, Object>> startBattle(@RequestBody(required = false) Map<String, String> body) {
-        String playerName = body != null && body.containsKey("playerName") ? body.get("playerName") : null;
-        String enemyName = body != null && body.containsKey("enemyName") ? body.get("enemyName") : null;
-
-        var result = battleService.startBattle(playerName, enemyName);
+    public ResponseEntity<Map<String, Object>> startBattle(@RequestBody(required = false) Map<String, Object> body) {
+        FighterData player = new LegacyProviderAdapter(body, "fighter1_", "Héroe", 150, 25);
+        FighterData enemy = new LegacyProviderAdapter(body, "fighter2_", "Dragón", 120, 30);
+        var result = battleService.startBattle(player, enemy);
         Battle battle = result.battle();
 
         return ResponseEntity.ok(Map.of(
