@@ -99,8 +99,16 @@ Builder Pattern
 
 **Preguntas:**
 - ¿Qué pasaría si dos clases crean su propio `BattleRepository` sin el `static`?
+
+No se compartirián las batallas ya que serian dos instancias de Map totalmente diferentes.
+
 - ¿Cómo asegurar que **toda la aplicación** use la misma instancia de almacenamiento?
+
+Haciendo el constructor privado y proporcionar un úncio punto de acceso
+
 - ¿Qué patrón garantiza una única instancia de una clase?
+
+Patrón Singleton
 
 **Pista:** `infrastructure/persistence/BattleRepository.java`
 
