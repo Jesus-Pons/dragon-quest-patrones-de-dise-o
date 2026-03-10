@@ -1,6 +1,7 @@
 package com.taller.patrones.infrastructure.combat.factory;
 
 import com.taller.patrones.domain.Attack;
+import com.taller.patrones.domain.PosionStatus;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,7 +15,7 @@ public class AttackFactory {
         registerAttack("SLASH", () -> new Attack("Slash", 55, Attack.AttackType.NORMAL));
         registerAttack("FIREBALL", () -> new Attack("Fireball", 80, Attack.AttackType.SPECIAL));
         registerAttack("ICE_BEAM", () -> new Attack("Ice Beam", 70, Attack.AttackType.SPECIAL));
-        registerAttack("POISON_STING", () -> new Attack("Poison Sting", 20, Attack.AttackType.STATUS));
+        registerAttack("POISON_STING", () -> new Attack("Poison Sting", 20, Attack.AttackType.STATUS, new PosionStatus()));
         registerAttack("THUNDER", () -> new Attack("Thunder", 90, Attack.AttackType.SPECIAL));
         registerAttack("METEORO", () -> new Attack("Meteoro", 120, Attack.AttackType.SPECIAL));
     }

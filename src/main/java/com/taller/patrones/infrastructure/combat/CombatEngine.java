@@ -4,6 +4,9 @@ import com.taller.patrones.domain.Attack;
 import com.taller.patrones.domain.Character;
 import com.taller.patrones.infrastructure.combat.factory.AttackFactory;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Motor de combate. Calcula daño y crea ataques.
  * <p>
@@ -11,9 +14,14 @@ import com.taller.patrones.infrastructure.combat.factory.AttackFactory;
  */
 public class CombatEngine {
     private final  AttackFactory attackFactory;
+    private final Map<Attack.AttackType, DamageStrategy> damageStrategies;
 
     public CombatEngine() {
         this.attackFactory = new AttackFactory();
+        this.damageStrategies = new HashMap<>();
+        this.damageStrategies.put(Attack.AttackType.NORMAL, new NormalDamageStrategy());
+        this.damageStrategies.put(Attack.AttackType.SPECIAL, new SpecialDamageStrategy());
+        this.damageStrategies.put(Attack.AttackType.STATUS, new StatusDamageStrategy());
     }
 
     public Attack createAttack(String name) {
@@ -25,18 +33,11 @@ public class CombatEngine {
      * Cada fórmula nueva (ej. crítico, veneno con tiempo) requiere modificar este switch.
      */
     public int calculateDamage(Character attacker, Character defender, Attack attack) {
-        return switch (attack.getType()) {
-            case NORMAL -> {
-                int raw = attacker.getAttack() * attack.getBasePower() / 100;
-                yield Math.max(1, raw - defender.getDefense());
-            }
-            case SPECIAL -> {
-                int raw = attacker.getAttack() * attack.getBasePower() / 100;
-                int effectiveDef = defender.getDefense() / 2;
-                yield Math.max(1, raw - effectiveDef);
-            }
-            case STATUS -> attacker.getAttack(); // Los de estado no hacen daño directo... ¿o sí?
-            default -> 0;
-        };
+        DamageStrategy strategy = damageStrategies.get(attack.getType());
+        
+        if(strategy != null) {
+            return strategy.calculateDamage(attacker,defender,attack);
+        }
+        return 0;
     }
 }

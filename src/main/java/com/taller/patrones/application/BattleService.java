@@ -68,6 +68,10 @@ public class BattleService {
         String target = defender == battle.getPlayer() ? "player" : "enemy";
         battle.setLastDamage(damage, target);
         battle.log(attacker.getName() + " usa " + attack.getName() + " y hace " + damage + " de daño a " + defender.getName());
+        int statusDamage = attacker.processStatus();
+        if(statusDamage > 0){
+            battle.log(attacker.getName() + " sufre " + statusDamage + " puntos de daño por " + attacker.getActiveStatus().getName() + ".");
+        }
         battle.switchTurn();
         if (!defender.isAlive()) {
             battle.finish(attacker.getName());

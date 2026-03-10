@@ -11,6 +11,7 @@ public class Character {
     private final int attack;
     private final int defense;
     private final int speed;
+    private StatusEffect activeStatus;
 
     public Character(String name, int maxHp, int attack, int defense, int speed) {
         this.name = name;
@@ -19,6 +20,7 @@ public class Character {
         this.attack = attack;
         this.defense = defense;
         this.speed = speed;
+        this.activeStatus = null;
     }
 
     public String getName() { return name; }
@@ -27,13 +29,23 @@ public class Character {
     public int getAttack() { return attack; }
     public int getDefense() { return defense; }
     public int getSpeed() { return speed; }
-
+    public StatusEffect getActiveStatus() { return activeStatus; }
     public void takeDamage(int damage) {
         this.currentHp = Math.max(0, currentHp - damage);
     }
 
+    public void applyStatus(StatusEffect effect) {
+        this.activeStatus = effect;
+    }
+
     public boolean isAlive() {
         return currentHp > 0;
+    }
+    public int processStatus(){
+        if (activeStatus != null && isAlive()) {
+            return activeStatus.process(this);
+        }
+        return 0;
     }
 
     public double getHpPercentage() {

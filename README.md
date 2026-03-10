@@ -55,7 +55,12 @@ Además, te piden un nuevo tipo: "CRÍTICO", con fórmula `daño * 1.5` y 20% de
 
 **Preguntas:**
 - ¿Qué principio SOLID se viola al añadir otro `case` en el switch?
+
+Se viola OCP
+
 - ¿Qué patrón permitiría tener fórmulas de daño intercambiables sin tocar el código existente?
+
+Patrón Strategy
 
 **Pista:** Cada tipo de ataque (NORMAL, SPECIAL, STATUS) tiene una fórmula distinta.
 
