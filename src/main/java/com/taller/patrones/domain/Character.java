@@ -13,13 +13,13 @@ public class Character {
     private final int speed;
     private StatusEffect activeStatus;
 
-    public Character(String name, int maxHp, int attack, int defense, int speed) {
-        this.name = name;
-        this.maxHp = maxHp;
-        this.currentHp = maxHp;
-        this.attack = attack;
-        this.defense = defense;
-        this.speed = speed;
+    public Character(Builder builder) {
+        this.name = builder.name;
+        this.maxHp = builder.maxHp;
+        this.currentHp = builder.maxHp;
+        this.attack = builder.attack;
+        this.defense = builder.defense;
+        this.speed = builder.speed;
         this.activeStatus = null;
     }
 
@@ -50,5 +50,44 @@ public class Character {
 
     public double getHpPercentage() {
         return maxHp > 0 ? (double) currentHp / maxHp * 100 : 0;
+    }
+
+    public static Builder builder(){
+        return new Builder();
+    }
+    public static class Builder{
+        private String name;
+        private int maxHp;
+        private int attack;
+        private int defense;
+        private int speed;
+
+        public Builder name(String name){
+            this.name = name;
+            return this;
+        }
+
+        public Builder maxHp(int maxHp){
+            this.maxHp = maxHp;
+            return this;
+        }
+        public Builder attack(int attack){
+            this.attack = attack;
+            return this;
+        }
+
+        public Builder defense(int defense){
+            this.defense = defense;
+            return this;
+        }
+
+        public Builder speed(int speed){
+            this.speed = speed;
+            return this;
+        }
+
+        public Character build(){
+            return new Character(this);
+        }
     }
 }
