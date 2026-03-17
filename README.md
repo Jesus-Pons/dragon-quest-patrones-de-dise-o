@@ -172,8 +172,17 @@ Ahora el ataque se ejecuta directamente en `applyDamage()`. No hay registro de "
 
 **Preguntas:**
 - ¿Qué tendrías que cambiar para poder "deshacer"?
+
+Guardar un historial de acciones realizadas en cada turno
+
 - ¿Cómo encapsular una acción (ataque) para poder ejecutarla, guardarla y revertirla?
+
+Con una clase commnad
+
 - ¿Qué patrón trata las acciones como objetos de primera clase?
+
+Patrón Command
+
 
 **Pista:** La lógica del ataque está en `BattleService.applyDamage()`.
 
@@ -185,7 +194,13 @@ Ahora el ataque se ejecuta directamente en `applyDamage()`. No hay registro de "
 
 **Preguntas:**
 - ¿Qué problema hay en exponer muchos detalles internos a quien solo quiere "hacer un ataque"?
+
+El alto acoplamiento y la complejidad
+
 - ¿Qué patrón ofrece una interfaz simple que oculta la complejidad del subsistema?
+
+Patrón Facade
+
 
 **Pista:** Piensa en qué necesita saber un cliente para ejecutar un ataque.
 
