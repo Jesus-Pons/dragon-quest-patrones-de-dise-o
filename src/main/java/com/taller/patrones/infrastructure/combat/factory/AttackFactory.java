@@ -1,9 +1,11 @@
 package com.taller.patrones.infrastructure.combat.factory;
 
 import com.taller.patrones.domain.Attack;
+import com.taller.patrones.domain.ComboAttack;
 import com.taller.patrones.domain.PosionStatus;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
@@ -18,7 +20,11 @@ public class AttackFactory {
         registerAttack("POISON_STING", () -> new Attack("Poison Sting", 20, Attack.AttackType.STATUS, new PosionStatus()));
         registerAttack("THUNDER", () -> new Attack("Thunder", 90, Attack.AttackType.SPECIAL));
         registerAttack("METEORO", () -> new Attack("Meteoro", 120, Attack.AttackType.SPECIAL));
-    }
+        registerAttack("COMBO_TRIPLE", () -> new ComboAttack("Combo Triple", List.of(
+                createAttack("TACKLE"),
+                createAttack("SLASH"),
+                createAttack("FIREBALL")
+        )));    }
 
     public void registerAttack(String name, Supplier<Attack> attackSupplier) {
         attackRegistry.put(name.toUpperCase(), attackSupplier);

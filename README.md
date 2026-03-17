@@ -214,7 +214,13 @@ Ahora cada ataque es independiente. No hay forma de agrupar varios.
 
 **Preguntas:**
 - ¿Cómo representar "un ataque que son varios ataques"?
+
+Crear una clase ataque, pero que contenga una colección de otros ataques
+
 - ¿Qué patrón permite tratar un grupo de objetos igual que un objeto individual?
+
+Patrón Composite
+
 
 **Pista:** `Attack` es una unidad. ¿Cómo hacer que varios `Attack` se comporten como uno?
 
