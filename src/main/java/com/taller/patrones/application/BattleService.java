@@ -1,5 +1,8 @@
 package com.taller.patrones.application;
 
+import com.taller.patrones.application.events.AnalyticsListener;
+import com.taller.patrones.application.events.AuditLogListener;
+import com.taller.patrones.application.events.DamagePublisher;
 import com.taller.patrones.domain.Attack;
 import com.taller.patrones.domain.Battle;
 import com.taller.patrones.domain.Character;
@@ -20,9 +23,15 @@ public class BattleService {
 
     private final CombatEngine combatEngine = new CombatEngine();
     private final BattleRepository battleRepository = BattleRepository.getInstance();
-
+    private final DamagePublisher damagePublisher= new DamagePublisher();
     public static final List<String> PLAYER_ATTACKS = List.of("TACKLE", "SLASH", "FIREBALL", "ICE_BEAM", "POISON_STING", "THUNDER","METEORO");
     public static final List<String> ENEMY_ATTACKS = List.of("TACKLE", "SLASH", "FIREBALL");
+
+    public BattleService() {
+        this.damagePublisher.addListener(new AuditLogListener());
+        this.damagePublisher.addListener(new AnalyticsListener());
+    }
+
 
     public BattleStartResult startBattle(FighterData playerData, FighterData enemyData) {
         Character player = Character.builder()
@@ -74,7 +83,7 @@ public class BattleService {
         defender.takeDamage(damage);
         String target = defender == battle.getPlayer() ? "player" : "enemy";
         battle.setLastDamage(damage, target);
-        battle.log(attacker.getName() + " usa " + attack.getName() + " y hace " + damage + " de daño a " + defender.getName());
+        damagePublisher.attackAction(battle,attacker,defender,damage,attack);
         int statusDamage = attacker.processStatus();
         if(statusDamage > 0){
             battle.log(attacker.getName() + " sufre " + statusDamage + " puntos de daño por " + attacker.getActiveStatus().getName() + ".");

@@ -148,8 +148,17 @@ Ahora mismo solo existe `battle.log()`. Tendrías que añadir código en `Battle
 
 **Preguntas:**
 - ¿Qué pasa si añades 5 "suscriptores" más? ¿Cuántas líneas tocarías en `applyDamage()`?
+
+Tendría que añadir tanto los servicios, como las líneas de código en applyDamage() para notificar (5 aprox).
+
 - ¿Cómo desacoplar "ejecutar ataque" de "notificar a quien le interese"?
+
+Haciendo un sistema de subscripción para que los interesados en la información se subscriban para recibirla.
+
 - ¿Qué patrón permite que varios objetos reaccionen a un evento sin que el emisor los conozca?
+
+patrón Observer
+
 
 **Pista:** El método `applyDamage` en `BattleService` es el único que sabe cuándo hay daño.
 
