@@ -434,6 +434,10 @@
             <div class="command-panel">
                 <h3 id="turn-indicator">▶ Tu turno - Elige un ataque:</h3>
                 <div class="attack-grid" id="attack-buttons"></div>
+
+                <div style="margin-top: 1rem; text-align: center;">
+                    <button class="attack-btn" onclick="undo()" style="border-color: #4a6fa5;">⏪ Deshacer último turno</button>
+                </div>
             </div>
 
             <div class="message-box">
@@ -504,6 +508,20 @@
                 if (!data.finished && data.currentTurn === 'enemy') {
                     setTimeout(enemyTurn, 1200);
                 }
+            } catch (e) {
+                console.error(e);
+            }
+        }
+        async function undo() {
+            if (!battleId) return;
+            try {
+                const res = await fetch(API_BASE + `/api/battle/${battleId}/undo`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                const data = await res.json();
+
+                updateUI(data);
             } catch (e) {
                 console.error(e);
             }

@@ -1,5 +1,7 @@
 package com.taller.patrones.application;
 
+import com.taller.patrones.application.command.AttackCommand;
+import com.taller.patrones.application.command.Command;
 import com.taller.patrones.application.events.AnalyticsListener;
 import com.taller.patrones.application.events.AuditLogListener;
 import com.taller.patrones.application.events.DamagePublisher;
@@ -11,6 +13,7 @@ import com.taller.patrones.infrastructure.persistence.BattleRepository;
 import com.taller.patrones.interfaces.rest.adapter.FighterData;
 
 import java.util.List;
+import java.util.Stack;
 import java.util.UUID;
 
 /**
@@ -26,7 +29,7 @@ public class BattleService {
     private final DamagePublisher damagePublisher= new DamagePublisher();
     public static final List<String> PLAYER_ATTACKS = List.of("TACKLE", "SLASH", "FIREBALL", "ICE_BEAM", "POISON_STING", "THUNDER","METEORO");
     public static final List<String> ENEMY_ATTACKS = List.of("TACKLE", "SLASH", "FIREBALL");
-
+    private final Stack<Command> commandsHistory = new Stack<>();
     public BattleService() {
         this.damagePublisher.addListener(new AuditLogListener());
         this.damagePublisher.addListener(new AnalyticsListener());
@@ -80,13 +83,13 @@ public class BattleService {
     }
 
     private void applyDamage(Battle battle, Character attacker, Character defender, int damage, Attack attack) {
-        defender.takeDamage(damage);
-        String target = defender == battle.getPlayer() ? "player" : "enemy";
-        battle.setLastDamage(damage, target);
-        damagePublisher.attackAction(battle,attacker,defender,damage,attack);
+        Command attackCommand = new AttackCommand(battle, attacker, defender, damage, attack);
+        attackCommand.execute();
+        commandsHistory.push(attackCommand);
+        damagePublisher.attackAction(battle, attacker, defender, damage, attack);
         int statusDamage = attacker.processStatus();
-        if(statusDamage > 0){
-            battle.log(attacker.getName() + " sufre " + statusDamage + " puntos de daño por " + attacker.getActiveStatus().getName() + ".");
+        if (statusDamage > 0) {
+            battle.log(attacker.getName() + " sufre " + statusDamage + " puntos de daño por estado.");
         }
         battle.switchTurn();
         if (!defender.isAlive()) {
@@ -114,6 +117,15 @@ public class BattleService {
         String battleId = UUID.randomUUID().toString();
         battleRepository.save(battleId, battle);
         return new BattleStartResult(battleId, battle);
+    }
+
+    public void undoLastAction() {
+        if (!commandsHistory.isEmpty()) {
+            Command lastCommand = commandsHistory.pop();
+            lastCommand.undo();
+        } else {
+            System.out.println("No hay acciones para deshacer.");
+        }
     }
 
     public record BattleStartResult(String battleId, Battle battle) {}

@@ -107,6 +107,13 @@ public class BattleController {
         battleService.executeEnemyAttack(battleId, attack);
         return ResponseEntity.ok(toBattleDto(battleService.getBattle(battleId)));
     }
+    @PostMapping("/{battleId}/undo")
+    public ResponseEntity<Map<String, Object>> undoAttack(@PathVariable String battleId) {
+        Battle battle = battleService.getBattle(battleId);
+        if (battle == null) return ResponseEntity.notFound().build();
+        battleService.undoLastAction();
+        return ResponseEntity.ok(toBattleDto(battleService.getBattle(battleId)));
+    }
 
     private Map<String, Object> toBattleDto(Battle battle) {
         return Map.of(

@@ -51,6 +51,10 @@ public class Character {
     public double getHpPercentage() {
         return maxHp > 0 ? (double) currentHp / maxHp * 100 : 0;
     }
+    // En Character.java
+    public void heal(int amount) {
+        this.currentHp = Math.min(this.maxHp, this.currentHp + amount);
+    }
 
     public static Builder builder(){
         return new Builder();
