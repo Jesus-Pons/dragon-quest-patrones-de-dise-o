@@ -36,6 +36,9 @@ public class CombatEngine {
         DamageStrategy strategy = damageStrategies.get(attack.getType());
         
         if(strategy != null) {
+            if (Math.random()<=0.2) {
+                return (int)Math.round(strategy.calculateDamage(attacker, defender, attack) * 1.5);
+            }
             return strategy.calculateDamage(attacker,defender,attack);
         }
         return 0;
